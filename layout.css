@@ -1,0 +1,14 @@
+/*layout*/
+#pool *{
+    text-align: center;
+    margin-top: 5px;
+}
+#controlPanel {
+    text-align: center;
+}
+#left {
+    background: red;
+}
+#right {
+    background: purple;
+}
