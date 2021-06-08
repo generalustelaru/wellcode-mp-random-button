@@ -1,82 +1,96 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset = "utf-8"/>
+        <meta charset="utf-8"/>
         <title>
-            True Buttom
+            True Button
         </title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        <link rel = "stylesheet" href = "layout.css">
+        <style>
+            #pool *{
+                text-align: center;
+                margin: 5px;
+            }
+            #controlPanel {
+                text-align: center;
+            }
+            span {
+                font-size: .8em;
+            }
+        </style>
     </head>
     <body>
-        <div class = "container">
-            <div class = "row">
-                <div class = "col-xl-4" id = "leftPanel">            
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-4">            
                 </div>
-                <div class = "col-xl-4" id = "display">
-                    <div id = "pool">
-                        <button type="button" class="btn btn-secondary" id="1" onclick=verify(1)>1</button>
-                        <button type="button" class="btn btn-secondary" id="2" onclick=verify(2)>2</button>
-                        <button type="button" class="btn btn-secondary" id="3" onclick=verify(3)>3</button>
-                        <button type="button" class="btn btn-secondary" id="4" onclick=verify(4)>4</button>
-                        <button type="button" class="btn btn-secondary" id="5" onclick=verify(5)>5</button>
-                        <button type="button" class="btn btn-secondary" id="6" onclick=verify(6)>6</button>
-                        <button type="button" class="btn btn-secondary" id="7" onclick=verify(7)>7</button>
-                        <button type="button" class="btn btn-secondary" id="8" onclick=verify(8)>8</button>
-                        <button type="button" class="btn btn-secondary" id="9" onclick=verify(9)>9</button>
+                <div class="col-xl-4">
+                    <div id="pool">
+                        <!--Buttons-->
                     </div>                         
                 </div>
-                <div class = "col-xl-4" id = "rightPanel">            
+                <div class="col-xl-4">            
                 </div>
             </div>
             <div class="row">
-                <div class = "col-xl-4"></div>
-                <div id="controlPanel" class = "col-xl-4">
-                    <div id = "outcome">
-                        <span>Pro Tip: It's&nbsp;</span><span id = "result"></span>
+                <div class="col-xl-4"></div>
+                <div id="controlPanel" class="col-xl-4">
+                    <div id="outcome">
+                        <span>Pro Tip: It's&nbsp;</span><span id="result"></span>
                     </div>
                     <div>
-                        <button onclick = "reset()">Start Over</button>
+                        <button onclick="reset()">Start Over</button>
+                        <input type="number" name="buttons" id="buttons" value="2" min="2" max="13">
                     </div>
                 </div>
-                <div class = "col-xl-4"></div>
+                <div class="col-xl-4"></div>
             </div>
-            
         </div>
-       
-        
-        
         <!--Script-->
         <script>
             var hit, buttons;
             (
                 function() {
+                    buttons = document.getElementById('buttons').value;
+                    populate();
                     randomize();
                 }
                 ()
             )
-            function randomize() {
-                    buttons = 9;
-                    hit = Math.round(Math.random() * buttons);
-                    if (hit == 0)
-                        hit = buttons;
-                    document.getElementById('result').innerText = hit;
-                }
-
-            function verify(n) {
+            function randomize() { // Generate a random number between 1 and the number of buttons and store it in 'hit'
+                hit = Math.round(Math.random() * buttons);
+                if (hit == 0) {
+                    hit = buttons;
+                }                    
+                document.getElementById('result').innerText = hit;
+            }
+            function verify(n) { // Check selected button against 'hit'
                 if (n == hit) {
-                    document.getElementById('outcome').innerHTML = "<bold>Congratulations!</bold>";
+                    document.getElementById('outcome').innerHTML = "<strong>Congratulations!</strong>";
                     document.getElementById(n).className = "btn btn-success";
                 }                    
                 else
                     document.getElementById(n).disabled = true;
             }
-            function reset() {
-                document.getElementById(hit).className = "btn btn-secondary";
-                for (let id = 1; id <= buttons; id++) {
-                    document.getElementById(id).disabled = false;                    
+            function populate() { // Create buttons
+                    for (let i = 1; i <= buttons; i++) {
+                        let newButton = document.createElement("button");
+                        newButton.type = "button";
+                        newButton.className = "btn btn-secondary";
+                        newButton.id = i;
+                        newButton.onclick = function(){verify(i)};
+                        newButton.innerHTML = i;
+                        document.getElementById('pool').appendChild(newButton);
+                    }
+            }
+            function reset() { // Remove all buttons, reset tip text, then populate() and randomize()
+                for (let i = buttons; i > 0; i--) {
+                    var old = document.getElementById(i);
+                    old.remove();
                 }
+                buttons = document.getElementById('buttons').value;
                 document.getElementById('outcome').innerHTML = "<span>Pro Tip: It's&nbsp;</span><span id = \"result\"></span>";
+                populate();                
                 randomize();
             }
         </script>
