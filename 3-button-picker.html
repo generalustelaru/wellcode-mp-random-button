@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>
+            3-button Picker
+        </title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <style>
+            #pool *{
+                text-align: center;
+                margin: 5px;
+            }
+            #controlPanel {
+                text-align: center;
+            }
+            span {
+                font-size: .8em;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-5">            
+                </div>
+                <div class="col-xl-2">
+                    <div id="pool">
+                        <!--Buttons-->
+                        <button type="button" class="btn btn-secondary" onclick="verify(1)"id="1">1</button>
+                        <button type="button" class="btn btn-secondary" onclick="verify(2)"id="2">2</button>
+                        <button type="button" class="btn btn-secondary" onclick="verify(3)"id="3">3</button>
+                    </div>                         
+                </div>
+                <div class="col-xl-5">            
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-4"></div>
+                <div id="controlPanel" class="col-xl-4">
+                    <div id="outcome">
+                        <span>Pro Tip: It's&nbsp;</span><span id="result"></span>
+                    </div>
+                    <div>
+                        <button onclick="reset()">Start Over</button>
+                        <!-- <input type="number" name="buttons" id="buttons" value="2" min="2" max="13"> -->
+                    </div>
+                </div>
+                <div class="col-xl-4"></div>
+            </div>
+        </div>
+        <!--Script-->
+        <script>
+            var correct, buttons = 3;
+            (
+                function() {
+                    //buttons = document.getElementById('buttons').value;
+                    //populate();
+                    randomize();
+                }
+                ()
+            )
+            function randomize() { // Generate a random number between 1 and the number of buttons and store it
+                correct = Math.round(Math.random() * buttons);
+                if (correct == 0) {
+                    correct = buttons;
+                }                    
+                document.getElementById('result').innerText = correct;
+            }
+            function verify(n) { // Check selected button against 'correct'
+                if (n == correct) {
+                    document.getElementById('outcome').innerHTML = "<strong>Congratulations!</strong>";
+                    document.getElementById(n).className = "btn btn-success";
+                    for (let i = 1; i <= buttons; i++) {
+                        if (i != n)
+                        document.getElementById(i).disabled = true;
+                    }
+                }                    
+                else
+                    document.getElementById(n).disabled = true;
+            }
+            /* function populate() { // Create buttons 
+                    for (let i = 1; i <= buttons; i++) {
+                        let newButton = document.createElement("button");
+                        newButton.type = "button";
+                        newButton.className = "btn btn-secondary";
+                        newButton.id = i;
+                        newButton.onclick = function(){verify(i)};
+                        newButton.innerHTML = i;
+                        document.getElementById('pool').appendChild(newButton);
+                    }
+            } */
+            function reset() { // Remove all buttons, reset tip text, then populate() and randomize() // in fact, reset all 3 buttons and randomize
+                /* for (let i = buttons; i > 0; i--) {
+                    var old = document.getElementById(i);
+                    old.remove();
+                } */
+                //buttons = document.getElementById('buttons').value;
+                document.getElementById('outcome').innerHTML = "<span>Pro Tip: It's&nbsp;</span><span id = \"result\"></span>";
+                //populate();
+                for (let i = 1; i <= 3; i++) { // This replaces populate() in the 3-button version
+                    let button = document.getElementById(i);
+                    button.disabled = false; 
+                    button.className = "btn btn-secondary";
+                }             
+                randomize();
+            }
+        </script>
+    </body>
+</html>
